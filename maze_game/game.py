@@ -1,24 +1,36 @@
 from maze import Maze
-from player import Player
 from menu import Menu
+from player import Player
 
 
 class Game:
-    """Основной класс игры."""
+    """Основной класс игры, управляющий игровым процессом.
 
-    def __init__(self):
-        """Инициализация игры."""
+    Attributes:
+        maze (Maze): Текущий лабиринт.
+        player (Player): Текущий игрок.
+        game_running (bool): Флаг, указывающий, активен ли игровой цикл.
+    """
+
+    def __init__(self) -> None:
+        """Инициализирует игру, создавая лабиринт и игрока."""
 
         self.maze = Maze()
         self.player = Player(*self.maze.player_start_position)
         self.game_running = False
 
-    def handle_input(self, key):
-        """Обработка ввода пользователя."""
+    def handle_input(self, key: str) -> bool:
+        """Обрабатывает ввод пользователя и выполняет соответствующие действия.
+
+        Args:
+            key (str): Нажатая клавиша (в нижнем регистре).
+
+        Returns:
+            bool: True если был обработан валидный ввод, False в противном случае.
+        """
 
         key = key.lower()
 
-        # Определение направления движения
         if key in ['w', 'ц']:  # W или русская Ц
 
             return self.player.move(0, -1, self.maze)
@@ -43,15 +55,19 @@ class Game:
 
         return False
 
-    def check_win(self):
-        """Проверка победы."""
+    def check_win(self) -> bool:
+        """Проверяет, достиг ли игрок выхода из лабиринта.
+
+        Returns:
+            bool: True если игрок находится на клетке выхода, False в противном случае.
+        """
 
         player_x, player_y = self.player.get_position()
 
         return self.maze.is_exit(player_x, player_y)
 
-    def run_game_loop(self):
-        """Запуск игрового цикла."""
+    def run_game_loop(self) -> None:
+        """Запускает и управляет основным игровым циклом."""
 
         self.game_running = True
 
@@ -63,12 +79,11 @@ class Game:
             # Проверка победы
             if self.check_win():
                 Menu.clear_screen()
-
                 print("╔══════════════════════════════════╗")
-                print("║           ПОБЕДА!                ║")
-                print("╠══════════════════════════════════╣")
-                print(f"║ Вы нашли выход за {self.player.moves_count:<3} ходов!   ║")
-                print("╚══════════════════════════════════╝")
+                print(" ║           ПОБЕДА!                ║")
+                print(" ╠══════════════════════════════════╣")
+                print(f" ║ Вы нашли выход за {self.player.moves_count:<3} ходов!     ║")
+                print(" ╚══════════════════════════════════╝")
                 input("\nНажмите Enter для возврата в меню...")
                 break
 
@@ -76,21 +91,20 @@ class Game:
             key = input("Ваш ход: ")
 
             # Обработка ввода
-            if key in ['w', 'a', 's', 'd', 'q',
-                       'ц', 'ф', 'ы', 'в']:  # Русские буквы
+            if key in ['w', 'a', 's', 'd', 'q', 'ц', 'ф', 'ы', 'в']:
                 self.handle_input(key)
             elif key == '':  # Стрелки (пустой ввод после стрелок в некоторых терминалах)
                 pass
 
-    def start_new_game(self):
-        """Начало новой игры."""
+    def start_new_game(self) -> None:
+        """Начинает новую игру, сбрасывая лабиринт и игрока."""
 
         self.maze = Maze()
         self.player = Player(*self.maze.player_start_position)
         self.run_game_loop()
 
-    def run(self):
-        """Запуск основного цикла приложения."""
+    def run(self) -> None:
+        """Запускает основной цикл приложения с меню."""
 
         while True:
             choice = Menu.show_main_menu()
@@ -103,7 +117,6 @@ class Game:
                 Menu.show_about()
             elif choice == 4:
                 Menu.clear_screen()
-
                 print("╔══════════════════════════════════╗")
                 print("║     Спасибо за игру!             ║")
                 print("╚══════════════════════════════════╝")

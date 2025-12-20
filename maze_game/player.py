@@ -1,15 +1,35 @@
 class Player:
-    """Класс для управления игроком."""
+    """Класс для управления игроком в лабиринте.
 
-    def __init__(self, start_x, start_y):
-        """Инициализация игрока."""
+    Attributes:
+        x (int)
+        y (int)
+        moves_count (int)
+    """
+
+    def __init__(self, start_x: int, start_y: int) -> None:
+        """Инициализирует игрока со стартовой позицией.
+
+        Args:
+            start_x (int)
+            start_y (int)
+        """
 
         self.x = start_x
         self.y = start_y
         self.moves_count = 0
 
-    def move(self, dx, dy, maze):
-        """Попытка перемещения игрока."""
+    def move(self, dx: int, dy: int, maze: 'Maze') -> bool:
+        """Пытается переместить игрока в указанном направлении.
+
+        Args:
+            dx (int): Смещение по оси X (-1, 0, 1).
+            dy (int): Смещение по оси Y (-1, 0, 1).
+            maze (Maze): Объект лабиринта для проверки стен.
+
+        Returns:
+            bool: True если перемещение удалось, False если уперлись в стену.
+        """
 
         new_x = self.x + dx
         new_y = self.y + dy
@@ -23,7 +43,11 @@ class Player:
 
         return False
 
-    def get_position(self):
-        """Получение текущей позиции игрока."""
+    def get_position(self) -> tuple[int, int]:
+        """Возвращает текущую позицию игрока.
+
+        Returns:
+            tuple[int, int]: Пара (x, y) с координатами игрока.
+        """
 
         return self.x, self.y
